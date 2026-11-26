@@ -29,7 +29,12 @@
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
 .wrap{max-width:880px;margin:0 auto;padding-block:28px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 h1,h2{font-family:var(--display);font-weight:500!important;text-wrap:balance;margin:0;letter-spacing:-.015em}
-h1{font-size:clamp(26px,5vw,38px);font-weight:700}
+h1{font-size:clamp(32px,5vw,40px);font-weight:700;line-height:1.1}
+h2{line-height:1.15}
+h1 .sub{white-space:nowrap}
+@media (max-width:600px){h1 .dot{display:none} h1 .sub{display:block;color:var(--accent);font-size:.78em;margin-top:6px}}
+.settings .pair{display:inline-flex;align-items:center;gap:8px}
+@media (max-width:600px){.wrap .settings{display:grid;grid-template-columns:auto 1fr;gap:10px 12px}.wrap .settings>span:first-child,.wrap .settings>span:last-child{grid-column:1/-1}.settings .pair{display:contents}.settings select{justify-self:start}}
 h2{font-size:clamp(22px,4vw,28px);font-weight:700}
 .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .lead{color:var(--muted);max-width:62ch;margin:8px 0 0}
@@ -117,9 +122,9 @@ function stopAll(){for(const k in timers){clearInterval(timers[k].id);delete tim
 function home(){
   stopAll();
   const opts=lv=>[30,45,60,90,120,180,300].map(s=>`<option value="${s}" ${s==secs[lv]?"selected":""}>${fmt(s)} min</option>`).join("");
-  app.innerHTML=`<div class="home-head"><h1>Simulacro por temas • Programación II</h1>
+  app.innerHTML=`<div class="home-head"><h1>Simulacro por temas<span class="dot"> • </span><span class="sub">Programación II</span></h1>
   <p class="lead">Elige un tema. Cada tema tiene 10 preguntas básicas y 10 de desafío. Cada pregunta empieza bloqueada: pulsa <b>Iniciar</b> para ver el código y arrancar su propio cronómetro. Si se acaba el tiempo, cuenta como incorrecta.</p></div>
-  <div class="settings"><span>Tiempo por pregunta:</span><label for="s0">básica</label><select id="s0">${opts(0)}</select><label for="s1">desafío</label><select id="s1">${opts(1)}</select><span>· 20 preguntas por tema (10 + 10)</span></div>
+  <div class="settings"><span>Tiempo por pregunta:</span><span class="pair"><label for="s0">básica</label><select id="s0">${opts(0)}</select></span><span class="pair"><label for="s1">desafío</label><select id="s1">${opts(1)}</select></span><span>20 preguntas por tema (10 + 10)</span></div>
   <div class="grid">${TOPICS.map((t,i)=>{const qs=qsOf(i);const done=qs.filter(q=>res[q[0]]).length;const ok=qs.filter(q=>res[q[0]]&&res[q[0]].ok).length;
     return `<button class="tile" data-t="${i}"><span class="num">TEMA ${String(i+1).padStart(2,"0")}</span><span class="name">${esc(t)}</span>
     <span class="bar"><i style="width:${done/qs.length*100}%"></i></span><span class="meta"><span>${done}/${qs.length} respondidas</span><span>${done?ok+" correctas":""}</span></span></button>`}).join("")}</div>`;
